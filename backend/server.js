@@ -18,7 +18,11 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: true,        
+    origin: [
+      'https://online-promotion-house-frontend.vercel.app',  
+      'http://localhost:5173',  
+      'http://localhost:3000'
+    ],
     credentials: true,
   })
 );
