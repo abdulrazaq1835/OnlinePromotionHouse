@@ -1,20 +1,20 @@
-import { useState, useContext } from "react"
-import { AuthContext } from "../context/AuthContext"
-import { useNavigate, Link } from "react-router-dom"
+import { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
-  const { register } = useContext(AuthContext)
+  const { register } = useContext(AuthContext);
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("")
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await register(name, email, password)
-      alert("Registered successfully!")
-      navigate("/"); 
+      await register(name, email, password);
+      alert("Registered successfully!");
+      navigate("/");
     } catch (err) {
       alert("Register failed!");
     }
@@ -26,7 +26,6 @@ const Register = () => {
         onSubmit={handleSubmit} 
         className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md relative overflow-hidden"
       >
-     
         <div className="text-center mb-8">
           <div className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-full mb-4 shadow-lg">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,7 +38,6 @@ const Register = () => {
           <p className="text-gray-600 mt-2">Join our community today!</p>
         </div>
 
-     
         <div className="mb-5">
           <label className="block text-gray-700 font-medium mb-2">Full Name</label>
           <input
@@ -50,7 +48,6 @@ const Register = () => {
             className="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
           />
         </div>
-
 
         <div className="mb-5">
           <label className="block text-gray-700 font-medium mb-2">Email Address</label>
@@ -63,7 +60,6 @@ const Register = () => {
           />
         </div>
 
-
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-2">Password</label>
           <input
@@ -75,14 +71,12 @@ const Register = () => {
           />
         </div>
 
-       
         <button 
           className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 transition-all duration-200"
         >
           Register Now
         </button>
 
-     
         <p className="mt-6 text-center text-gray-600">
           Already have an account?{" "}
           <Link 
@@ -93,7 +87,6 @@ const Register = () => {
           </Link>
         </p>
 
-     
         <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-500 opacity-10 rounded-bl-full"></div>
         <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-red-400 to-yellow-500 opacity-10 rounded-tr-full"></div>
       </form>
