@@ -6,7 +6,6 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Load user from localStorage on page load
   useEffect(() => {
     try {
       const savedUser = localStorage.getItem('user');
@@ -17,7 +16,6 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error loading user from localStorage:", error);
-      // Clear corrupted data
       localStorage.removeItem('user');
       localStorage.removeItem('token');
     }
