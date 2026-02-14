@@ -1,9 +1,18 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
-  const  authMiddleware = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.cookies?.token;
+    let token;
+
+    // Check Authorization header first (for localStorage token)
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+    // Fallback to cookie
+    else if (req.cookies?.token) {
+      token = req.cookies.token;
+    }
 
     if (!token) {
       return res.status(401).json({ message: "Not authorized, no token" });
@@ -19,7 +28,9 @@ import User from "../models/user.js";
 
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Invalid expires token" });
+    console.error("Auth middleware error:", error);
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
-}
-export default authMiddleware
+};
+
+export default authMiddleware;
