@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
-
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -25,28 +24,34 @@ export const registerUser = async (req, res) => {
     });
 
     const token = jwt.sign(
-      { id: user._id },
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
     res.cookie("token", token, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(201).json({
       message: "Registered successfully",
-      name: user.name,
-      email: user.email,
-      role: user.role,
+      token,  
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }
     });
 
   } catch (error) {
-    res.status(500).json({ message: "Register failed" })
+    console.error(error);
+    res.status(500).json({ message: "Register failed" });
   }
 };
-
 
 export const loginUser = async (req, res) => {
   try {
@@ -54,7 +59,7 @@ export const loginUser = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: "Invalid email and password" })
+      return res.status(401).json({ message: "Invalid email and password" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -63,25 +68,31 @@ export const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id },
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
     res.cookie("token", token, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.json({
       message: "Login successful",
       token,
-      name: user.name,
-      email: user.email,
-      role: user.role,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }
     });
 
   } catch (error) {
-    res.status(500).json({ message: "Login failed" })
+    console.error(error);
+    res.status(500).json({ message: "Login failed" });
   }
 };
