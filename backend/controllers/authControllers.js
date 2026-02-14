@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
+
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -24,7 +25,7 @@ export const registerUser = async (req, res) => {
     });
 
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, role: user.role },  // ← Add role here
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -38,7 +39,7 @@ export const registerUser = async (req, res) => {
 
     res.status(201).json({
       message: "Registered successfully",
-      token,
+      token,  // ← Add this
       user: {
         id: user._id,
         name: user.name,
@@ -48,10 +49,10 @@ export const registerUser = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Register error:", error);
-    res.status(500).json({ message: "Register failed" });
+    res.status(500).json({ message: "Register failed" })
   }
 };
+
 
 export const loginUser = async (req, res) => {
   try {
@@ -59,7 +60,7 @@ export const loginUser = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: "Invalid email and password" });
+      return res.status(401).json({ message: "Invalid email and password" })
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -68,7 +69,7 @@ export const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, role: user.role },  // ← Add role here
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -82,7 +83,7 @@ export const loginUser = async (req, res) => {
 
     res.json({
       message: "Login successful",
-      token,
+      token,  // ← Add this
       user: {
         id: user._id,
         name: user.name,
@@ -92,7 +93,6 @@ export const loginUser = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ message: "Login failed" });
+    res.status(500).json({ message: "Login failed" })
   }
 };
