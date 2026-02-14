@@ -10,7 +10,7 @@ export const addComment = async (req, res) => {
 
     const comment = await Comment.create({
       postId: req.params.postId,
-      userId: req.user.id,  // ← CHANGE: _id se id
+      userId: req.user.id,
       text,
     });
 
@@ -18,7 +18,7 @@ export const addComment = async (req, res) => {
 
     res.status(201).json(comment);
   } catch (error) {
-    console.error(error);
+    console.error("Add comment error:", error);
     res.status(500).json({ message: "Failed to add comment" });
   }
 };
@@ -31,7 +31,7 @@ export const getCommentsByPost = async (req, res) => {
 
     res.json(comments);
   } catch (error) {
-    console.error(error);
+    console.error("Get comments error:", error);
     res.status(500).json({ message: "Failed to fetch comments" });
   }
 };
